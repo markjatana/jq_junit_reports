@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>JJunit Report Demo</title>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+<meta name="language" content="en" />
+<meta name="layout" content="main"></meta>
+<link rel="stylesheet" href="../css/main.css" />
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script>
+
+var data='{"name":"CUT1","errors":"1","total":"2","completed":"1/2","testSuites":[{"name":"testSuite1","testCases":[{"name":"case1","time":"3hrs","state":"passed"},{"name":"case2","time":"2hrs","state":"failed"}]}]}';
+
+
+$(document).ready(function() {
+	var run = JSON.parse(data)
+	generateMarkUp(run)
+	document.getElementById('runMargin').addEventListener("click", createHideListener(["suiteContainer"], "runTwistie"), false);
+	document.getElementById('suiteMargin').addEventListener("click", createHideListener(["caseContainer1","caseContainer2","caseContainer3"], "suiteTwistie"), false);
+});
+
+	function generateMarkUp(run){
+		$(document.body).append('<div class="runContainer group">'
+		+'<div class="runHeader group">'
+			+'<div id="runMargin" class="runMargin rounded group">'
+				+'<div id="runTwistie" class="runTwistie">+</div>'
+			+'</div>'
+			+'<div class="summary rounded">'
+				+'<ol class="details group">'	
+				+'</ol>'
+				+'<div class="progressBar"></div>'
+			+'</div>'
+		+'</div>'
+		+'<div id="suiteContainer" class="suiteContainer group">'
+		+'</div>'
+	+'</div>')
+	}
+
+	function createHideListener(ids, twistieId){
+		var hideElements = function(){
+			for(var i=0;i < ids.length;i++){
+				hide(ids[i])
+			}
+			switchTwistie(twistieId)
+		}
+		return hideElements;
+	}
+
+	function hide(id){
+		$('#'+id).slideToggle('slow');
+	}
+	
+	function switchTwistie(id){
+		var less = "-";
+		var more = "+";
+		var element = document.getElementById(id)
+		if(element.innerHTML == less){
+			element.innerHTML = more
+		}else{
+			element.innerHTML = less
+		}
+	}
+	
+
+</script>
+
+<!-- <script type="text/javascript"
+	src="../js/"></script> -->
+
+</head>
+<body>
+	<!-- title -->
+	<div id="datTitle" class="datTitle">DAT : 1234567</div>
+	<!-- start run -->
+	<div class="runContainer group">
+		<div class="runHeader group">
+			<div id="runMargin" class="runMargin rounded group">
+				<div id="runTwistie" class="runTwistie">+</div>
+			</div>
+			<div class="summary rounded">
+				<ol class="details group">
+					<li>CUT 1 : 8/15</li>
+					<li>Errors: 3</li>
+					<li>Failures: 4</li>
+				</ol>
+				<div class="progressBar"></div>
+			</div>
+		</div>
+		<div id="suiteContainer" class="suiteContainer group">
+			<div class="suiteHeader group">
+				<div id="suiteMargin" class="suiteMargin group rounded ">
+					<div id="suiteTwistie" class="suiteTwistie">-</div>
+				</div>
+				<div class="suiteDetails rounded">Name of VPPF Suite</div>
+			</div>
+			<div id="caseContainer1" class="caseContainer group">
+				<div id="caseHeader" class="caseHeader group">
+					<div class="caseMargin rounded group odd">
+						<div class="caseTwistie">+</div>
+					</div>
+					<div id="case1" class="caseDetails rounded group odd">Case 1
+						1h</div>
+				</div>
+			</div>
+			<div id="caseContainer2" class="caseContainer group">
+				<div class="caseHeader group">
+					<div class="caseMargin rounded group ">
+						<div class="caseTwistie">+</div>
+					</div>
+					<div class="caseDetails rounded group">Case 1 1h</div>
+				</div>
+			</div>
+			<div id="caseContainer3" class="caseContainer group">
+				<div class="caseHeader group">
+					<div class="caseMargin rounded group odd">
+						<div class="caseTwistie">+</div>
+					</div>
+					<div class="caseDetails rounded group odd">Case 1 1h</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--  close run -->
+</body>
+</html>
