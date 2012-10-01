@@ -1,4 +1,8 @@
+/*Copyright 2012 Mark Jatana */
+
+
 /* Undo some of the default styling */
+
 .group:after {
 	content: ".";
 	display: block;
