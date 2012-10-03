@@ -10,13 +10,13 @@
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script>
 
-var data='{"id": "1", "name":"CUT2", "failures": "0","errors":"1","total":"2","completed":"1","testSuites":[{"id": "1","name":"testSuite1","testCases":[{"id":"1", "name":"case1","time":"3hrs","state":"passed"},{"id":"2", "name":"case2","time":"2hrs","state":"failed"}]}]}';
+var data='[{"id": "1", "name":"CUT 1", "failures": "1","errors":"1","total":"2","completed":"2","testSuites":[{"id": "1","name":"VPPF_BAN","testCases":[{"id":"1", "name":"vso_ban","time":"3hrs","state":"passed"},{"id":"2", "name":"vse_ban","time":"2hrs","state":"failed"}]}]},{"id": "2", "name":"CUT 2", "failures": "0","errors":"0","total":"2","completed":"1","testSuites":[{"id": "21","name":"VPPF HIL","testCases":[{"id":"21", "name":"VSE","time":"3hrs","state":"passed"},{"id":"22", "name":"VSO","time":"2hrs","state":"passed"}]}]}]';
 
 	$(document).ready(function() {
 		var run = JSON.parse(data)
-		generateMarkUp(run)
-		document.getElementById('runMargin').addEventListener("click", createHideListener(["suiteContainer"], "runTwistie"), false);
-		document.getElementById('suiteMargin').addEventListener("click", createHideListener(["caseContainer1","caseContainer2","caseContainer3"], "suiteTwistie"), false);
+		for(var i=0; i < run.length ; i++){
+			generateMarkUp(run[i]);	
+		}
 	});
 
 	function generateMarkUp(run){
@@ -47,7 +47,7 @@ var data='{"id": "1", "name":"CUT2", "failures": "0","errors":"1","total":"2","c
 		Add run containers
 	*/
 	function generateRunContainers(run){
-		$(document.body).append('<div id="run_'+ run.id +'" class="runContainer group">'
+		$(document.getElementById('testContainer')).prepend('<div id="run_'+ run.id +'" class="runContainer group">'
 				+'<div class="runHeader group">'
 					+'<div id="runMargin_'+ run.id +'" class="runMargin rounded group">'
 						+'<div id="runTwistie_'+ run.id +'" class="runTwistie">-</div>'
@@ -58,10 +58,20 @@ var data='{"id": "1", "name":"CUT2", "failures": "0","errors":"1","total":"2","c
 						+ '<li>Errors: '+ run.errors +'</li>'
 						+ '<li>Failures: '+ run.failures +'</li>'
 						+'</ol>'
-						+'<div class="progressBar"></div>'
+						+'<div id="progressBar_'+ run.id +'"class="progressBar"></div>'
 					+'</div>'
 				+'</div>'
 			+'</div>');
+		
+		var progBar = document.getElementById('progressBar_'+run.id);
+		$(progBar).width((run.completed/run.total)*100+'%');
+		var color = 'red';
+		if(run.failures ==0){
+			color = 'green';
+		}
+		var runMargin = document.getElementById('runMargin_'+run.id);
+		$(runMargin).addClass( 'fail' );
+		
 	}
 	
 	/* 
@@ -140,6 +150,7 @@ var data='{"id": "1", "name":"CUT2", "failures": "0","errors":"1","total":"2","c
 <body>
 	<!-- title -->
 	<div id="datTitle" class="datTitle">DAT : 1234567</div>
+	<div id="testContainer" class="testContainer">
 	<!-- start run -->
 	<div class="runContainer group">
 		<div class="runHeader group">
@@ -188,7 +199,10 @@ var data='{"id": "1", "name":"CUT2", "failures": "0","errors":"1","total":"2","c
 				</div>
 			</div>
 		</div>
+		
 	</div>
 	<!--  close run -->
+	</div>
+	<!--  close testContainer -->
 </body>
 </html>
