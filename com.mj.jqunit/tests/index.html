@@ -10,32 +10,100 @@
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script>
 
-var data='{"name":"CUT1","errors":"1","total":"2","completed":"1/2","testSuites":[{"name":"testSuite1","testCases":[{"name":"case1","time":"3hrs","state":"passed"},{"name":"case2","time":"2hrs","state":"failed"}]}]}';
+var data='{"id": "1", "name":"CUT2", "failures": "0","errors":"1","total":"2","completed":"1","testSuites":[{"id": "1","name":"testSuite1","testCases":[{"id":"1", "name":"case1","time":"3hrs","state":"passed"},{"id":"2", "name":"case2","time":"2hrs","state":"failed"}]}]}';
 
-
-$(document).ready(function() {
-	var run = JSON.parse(data)
-	generateMarkUp(run)
-	document.getElementById('runMargin').addEventListener("click", createHideListener(["suiteContainer"], "runTwistie"), false);
-	document.getElementById('suiteMargin').addEventListener("click", createHideListener(["caseContainer1","caseContainer2","caseContainer3"], "suiteTwistie"), false);
-});
+	$(document).ready(function() {
+		var run = JSON.parse(data)
+		generateMarkUp(run)
+		document.getElementById('runMargin').addEventListener("click", createHideListener(["suiteContainer"], "runTwistie"), false);
+		document.getElementById('suiteMargin').addEventListener("click", createHideListener(["caseContainer1","caseContainer2","caseContainer3"], "suiteTwistie"), false);
+	});
 
 	function generateMarkUp(run){
-		$(document.body).append('<div class="runContainer group">'
-		+'<div class="runHeader group">'
-			+'<div id="runMargin" class="runMargin rounded group">'
-				+'<div id="runTwistie" class="runTwistie">+</div>'
-			+'</div>'
-			+'<div class="summary rounded">'
-				+'<ol class="details group">'	
-				+'</ol>'
-				+'<div class="progressBar"></div>'
-			+'</div>'
-		+'</div>'
-		+'<div id="suiteContainer" class="suiteContainer group">'
-		+'</div>'
-	+'</div>')
+		generateRunContainers(run)
+		generateSuites(run, run.id);
+		for(var i = 0; i < run.testSuites.length; i++){
+			generateCases(run.testSuites[i]);
+		}
+		addListeners(run);
 	}
+	
+	
+	function addListeners(run){
+		for(var i = 0; i < run.testSuites.length; i++){
+			
+			var testSuite = run.testSuites[i];
+			document.getElementById('runMargin_'+run.id).addEventListener("click", createHideListener(['suiteContainer_'+testSuite.id], 'runTwistie_'+run.id), false);
+			
+			var caseContainerIds = []
+			for(var x=0; x < testSuite.testCases.length; x++){
+				caseContainerIds.push( "caseContainer_"+testSuite.testCases[x].id)
+			}
+			document.getElementById('suiteMargin_'+testSuite.id).addEventListener("click", createHideListener(caseContainerIds, 'suiteTwistie_'+testSuite.id), false);
+		}	
+	}
+	
+	/*
+		Add run containers
+	*/
+	function generateRunContainers(run){
+		$(document.body).append('<div id="run_'+ run.id +'" class="runContainer group">'
+				+'<div class="runHeader group">'
+					+'<div id="runMargin_'+ run.id +'" class="runMargin rounded group">'
+						+'<div id="runTwistie_'+ run.id +'" class="runTwistie">-</div>'
+					+'</div>'
+					+'<div class="summary rounded">'
+						+'<ol class="details group">'
+						+ '<li>'+run.name+': '+run.completed+'/'+ run.total +'</li>'
+						+ '<li>Errors: '+ run.errors +'</li>'
+						+ '<li>Failures: '+ run.failures +'</li>'
+						+'</ol>'
+						+'<div class="progressBar"></div>'
+					+'</div>'
+				+'</div>'
+			+'</div>');
+	}
+	
+	/* 
+		Add suites
+	*/
+	function generateSuites(run, id){
+			var runContainer = document.getElementById('run_'+id);
+			for(var i = 0; i < run.testSuites.length; i++){
+				var testSuite = run.testSuites[i];
+				$(runContainer).append(
+						'<div id="suiteContainer_'+ testSuite.id +'" class="suiteContainer group">'
+						+	'<div class="suiteHeader group">'
+						+		'<div id="suiteMargin_'+ testSuite.id +'" class="suiteMargin group rounded ">'
+						+			'<div id="suiteTwistie_'+ testSuite.id +'" class="suiteTwistie">-</div>'
+						+		'</div>'
+						+		'<div class="suiteDetails rounded">'+ testSuite.name +'</div>'
+						+	'</div>'		
+					+	'</div>'		
+			    );
+				
+			}
+	}
+	
+	function generateCases(testSuite){
+		var suiteContainerElement = document.getElementById('suiteContainer_1');
+		for(var i = 0; i < testSuite.testCases.length; i++){
+			var testCase = testSuite.testCases[i];
+			$(suiteContainerElement).append(
+					'<div id="caseContainer_'+ testCase.id +'" class="caseContainer group">'
+			
+					+	'<div id="caseHeader" class="caseHeader group">'
+					+	'	<div id="caseMargin_'+ testCase.id +'" class="caseMargin rounded group odd">'	
+					+			'<div id="caseTwistie_'+ testCase.id +'" class="caseTwistie">+</div>'
+					+	'	</div>'
+					+		'<div id="case_'+ testCase.id +'" class="caseDetails rounded group odd">' + testCase.name +'</div>'
+					+		'</div>'
+			
+					+'</div>');
+		}
+	}
+	
+	
 
 	function createHideListener(ids, twistieId){
 		var hideElements = function(){
