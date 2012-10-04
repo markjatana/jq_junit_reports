@@ -10,7 +10,19 @@
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script>
 
-var data='[{"id": "1", "name":"CUT 1", "failures": "1","errors":"1","total":"2","completed":"2","testSuites":[{"id": "1","name":"VPPF_BAN","testCases":[{"id":"1", "name":"vso_ban","time":"3hrs","state":"passed"},{"id":"2", "name":"vse_ban","time":"2hrs","state":"failed"}]}]},{"id": "2", "name":"CUT 2", "failures": "0","errors":"0","total":"2","completed":"1","testSuites":[{"id": "21","name":"VPPF HIL","testCases":[{"id":"21", "name":"VSE","time":"3hrs","state":"passed"},{"id":"22", "name":"VSO","time":"2hrs","state":"passed"}]}]}]';
+var data='[{"id": "1", "name" : "CUT 1", "failures": "1","errors":"1","total":"2","completed":"2","testSuites":[{"id": "1","name":"VPPF_BAN","testCases":[{"id":"1", "name":"vso_ban","time":"3hrs","state":"passed"},{"id":"2", "name":"vse_ban","time":"2hrs","state":"failed"}]}]},{"id": "2", "name":"CUT 2", "failures": "0","errors":"0","total":"2","completed":"1","testSuites":[{"id": "21","name":"VPPF HIL","testCases":[{"id":"21", "name":"VSE","time":"3hrs","state":"passed"},{"id":"22", "name":"VSO","time":"2hrs","state":"passed"}]}]}]';
+
+	// test case json state pass value
+	var PASS_KEY = 'passed';
+	
+	// test case json state fail value
+	var FAIL_KEY = 'failed';
+	
+	// style class for passed elements
+	var PASS_CLASS = 'pass';
+	
+	// style class for fail elements
+	var FAIL_CLASS = 'fail';
 
 	$(document).ready(function() {
 		var run = JSON.parse(data)
@@ -26,6 +38,41 @@ var data='[{"id": "1", "name":"CUT 1", "failures": "1","errors":"1","total":"2",
 			generateCases(run.testSuites[i]);
 		}
 		addListeners(run);
+		addPassFailIndicators(run);
+	}
+	
+	function addPassFailIndicators(run){
+
+		var progBar = document.getElementById('progressBar_'+run.id);
+		$(progBar).width((run.completed/run.total)*100+'%');
+		var color = 'red';
+		if(run.failures == 0){
+			color = 'green';
+		}
+		$(progBar).css('background', color);
+		var runMargin = document.getElementById('runMargin_'+run.id);
+		$(runMargin).css('border', 'solid 2px '+color);
+		for(var i = 0; i < run.testSuites.length ; i++){
+			var testSuite = run.testSuites[i];
+			var suiteMarginElement = document.getElementById('suiteMargin_'+testSuite.id);
+			var hasFail = false;
+			for(var x = 0; x < testSuite.testCases.length ; x++){
+				var testCase = testSuite.testCases[x];
+				var caseMarginElement = document.getElementById('caseMargin_'+testCase.id);
+				if(testCase.state == FAIL_KEY){
+				  var hasFail = true;
+			      $(caseMarginElement).addClass(FAIL_CLASS);	  
+				}else if(testCase.state == PASS_KEY){
+				  $(caseMarginElement).addClass(PASS_CLASS);
+				}
+			}
+			if(hasFail){
+			      $(suiteMarginElement).addClass(FAIL_CLASS);
+			}else {
+				  $(suiteMarginElement).addClass(PASS_CLASS);
+			}
+				
+		}
 	}
 	
 	
@@ -49,7 +96,7 @@ var data='[{"id": "1", "name":"CUT 1", "failures": "1","errors":"1","total":"2",
 	function generateRunContainers(run){
 		$(document.getElementById('testContainer')).prepend('<div id="run_'+ run.id +'" class="runContainer group">'
 				+'<div class="runHeader group">'
-					+'<div id="runMargin_'+ run.id +'" class="runMargin rounded group">'
+					+'<div id="runMargin_'+ run.id +'" class="runMargin rounded margin group">'
 						+'<div id="runTwistie_'+ run.id +'" class="runTwistie">-</div>'
 					+'</div>'
 					+'<div class="summary rounded">'
@@ -63,15 +110,6 @@ var data='[{"id": "1", "name":"CUT 1", "failures": "1","errors":"1","total":"2",
 				+'</div>'
 			+'</div>');
 		
-		var progBar = document.getElementById('progressBar_'+run.id);
-		$(progBar).width((run.completed/run.total)*100+'%');
-		var color = 'red';
-		if(run.failures ==0){
-			color = 'green';
-		}
-		var runMargin = document.getElementById('runMargin_'+run.id);
-		$(runMargin).addClass( 'fail' );
-		
 	}
 	
 	/* 
@@ -84,7 +122,7 @@ var data='[{"id": "1", "name":"CUT 1", "failures": "1","errors":"1","total":"2",
 				$(runContainer).append(
 						'<div id="suiteContainer_'+ testSuite.id +'" class="suiteContainer group">'
 						+	'<div class="suiteHeader group">'
-						+		'<div id="suiteMargin_'+ testSuite.id +'" class="suiteMargin group rounded ">'
+						+		'<div id="suiteMargin_'+ testSuite.id +'" class="suiteMargin group rounded margin">'
 						+			'<div id="suiteTwistie_'+ testSuite.id +'" class="suiteTwistie">-</div>'
 						+		'</div>'
 						+		'<div class="suiteDetails rounded">'+ testSuite.name +'</div>'
@@ -96,14 +134,14 @@ var data='[{"id": "1", "name":"CUT 1", "failures": "1","errors":"1","total":"2",
 	}
 	
 	function generateCases(testSuite){
-		var suiteContainerElement = document.getElementById('suiteContainer_1');
+		var suiteContainerElement = document.getElementById('suiteContainer_'+testSuite.id);
 		for(var i = 0; i < testSuite.testCases.length; i++){
 			var testCase = testSuite.testCases[i];
 			$(suiteContainerElement).append(
 					'<div id="caseContainer_'+ testCase.id +'" class="caseContainer group">'
 			
 					+	'<div id="caseHeader" class="caseHeader group">'
-					+	'	<div id="caseMargin_'+ testCase.id +'" class="caseMargin rounded group odd">'	
+					+	'	<div id="caseMargin_'+ testCase.id +'" class="margin caseMargin rounded group odd">'	
 					+			'<div id="caseTwistie_'+ testCase.id +'" class="caseTwistie">+</div>'
 					+	'	</div>'
 					+		'<div id="case_'+ testCase.id +'" class="caseDetails rounded group odd">' + testCase.name +'</div>'
@@ -152,56 +190,7 @@ var data='[{"id": "1", "name":"CUT 1", "failures": "1","errors":"1","total":"2",
 	<div id="datTitle" class="datTitle">DAT : 1234567</div>
 	<div id="testContainer" class="testContainer">
 	<!-- start run -->
-	<div class="runContainer group">
-		<div class="runHeader group">
-			<div id="runMargin" class="runMargin rounded group">
-				<div id="runTwistie" class="runTwistie">+</div>
-			</div>
-			<div class="summary rounded">
-				<ol class="details group">
-					<li>CUT 1 : 8/15</li>
-					<li>Errors: 3</li>
-					<li>Failures: 4</li>
-				</ol>
-				<div class="progressBar"></div>
-			</div>
-		</div>
-		<div id="suiteContainer" class="suiteContainer group">
-			<div class="suiteHeader group">
-				<div id="suiteMargin" class="suiteMargin group rounded ">
-					<div id="suiteTwistie" class="suiteTwistie">-</div>
-				</div>
-				<div class="suiteDetails rounded">Name of VPPF Suite</div>
-			</div>
-			<div id="caseContainer1" class="caseContainer group">
-				<div id="caseHeader" class="caseHeader group">
-					<div class="caseMargin rounded group odd">
-						<div class="caseTwistie">+</div>
-					</div>
-					<div id="case1" class="caseDetails rounded group odd">Case 1
-						1h</div>
-				</div>
-			</div>
-			<div id="caseContainer2" class="caseContainer group">
-				<div class="caseHeader group">
-					<div class="caseMargin rounded group ">
-						<div class="caseTwistie">+</div>
-					</div>
-					<div class="caseDetails rounded group">Case 1 1h</div>
-				</div>
-			</div>
-			<div id="caseContainer3" class="caseContainer group">
-				<div class="caseHeader group">
-					<div class="caseMargin rounded group odd">
-						<div class="caseTwistie">+</div>
-					</div>
-					<div class="caseDetails rounded group odd">Case 1 1h</div>
-				</div>
-			</div>
-		</div>
-		
-	</div>
-	<!--  close run -->
+		<!--  close run -->
 	</div>
 	<!--  close testContainer -->
 </body>
