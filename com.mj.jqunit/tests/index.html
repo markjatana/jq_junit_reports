@@ -8,6 +8,11 @@
 <meta name="layout" content="main"></meta>
 <link rel="stylesheet" href="../css/main.css" />
 <script src="http://code.jquery.com/jquery-latest.js"></script>
+<script language="javascript" type="text/javascript" src="../js/jquery.jqplot.min.js"></script>
+<script language="javascript" type="text/javascript" src="../js/jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="../js/excanvas.js"></script>
+<script language="javascript" type="text/javascript" src="../js/jqplot.barRenderer.js"></script>
+<script language="javascript" type="text/javascript" src="../js/jqplot.categoryAxisRenderer.js"></script>
 <script>
 
 var data='[{"id": "1", "name" : "CUT 1", "failures": "1","errors":"1","total":"2","completed":"2","testSuites":[{"id": "1","name":"VPPF_BAN","testCases":[{"id":"1", "name":"vso_ban","time":"3hrs","state":"passed"},{"id":"2", "name":"vse_ban","time":"2hrs","state":"failed"}]}]},{"id": "2", "name":"CUT 2", "failures": "0","errors":"0","total":"2","completed":"1","testSuites":[{"id": "21","name":"VPPF HIL","testCases":[{"id":"21", "name":"VSE","time":"3hrs","state":"passed"},{"id":"22", "name":"VSO","time":"2hrs","state":"passed"}]}]}]';
@@ -28,8 +33,42 @@ var data='[{"id": "1", "name" : "CUT 1", "failures": "1","errors":"1","total":"2
 		var run = JSON.parse(data)
 		for(var i=0; i < run.length ; i++){
 			generateMarkUp(run[i]);	
+			for(var x =0; x < run[i].testSuites.length ; x++){
+				var testSuite = run[i].testSuites;
+				hide("suiteContainer_"+testSuite.id);
+			}
 		}
+		createPlot();
 	});
+	
+	function createPlot(){
+		$.jqplot.config.enablePlugins = true;
+        var s1 = [100, 100,100, 100, 100, 100,60, 40, 90, 50,50, 50, 100, 75,90, 100];
+        var ticks = [1234567, 1234567,1234567, 1234567, 1234567, 1234567,1234567, 1234567, 1234567, 1234567,1234567, 1234567, 1234567, 1234567,1234567, 1234567];
+         
+        plot1 = $.jqplot('chart1', [s1], {
+            // Only animate if we're not using excanvas (not in IE 7 or IE 8)..
+            animate: !$.jqplot.use_excanvas,
+            seriesDefaults:{
+                renderer:$.jqplot.BarRenderer,
+                pointLabels: { show: true }
+            },
+            axes: {
+                xaxis: {
+                    renderer: $.jqplot.CategoryAxisRenderer,
+                    ticks: ticks
+                }
+            },
+            highlighter: { show: false }
+        });
+     
+        $('#chart1').bind('jqplotDataClick',
+            function (ev, seriesIndex, pointIndex, data) {
+                $('#info1').html('series: '+seriesIndex+', point: '+pointIndex+', data: '+data);
+            }
+        );
+	}
+	
 
 	function generateMarkUp(run){
 		generateRunContainers(run)
@@ -39,6 +78,7 @@ var data='[{"id": "1", "name" : "CUT 1", "failures": "1","errors":"1","total":"2
 		}
 		addListeners(run);
 		addPassFailIndicators(run);
+		
 	}
 	
 	function addPassFailIndicators(run){
@@ -181,9 +221,7 @@ var data='[{"id": "1", "name" : "CUT 1", "failures": "1","errors":"1","total":"2
 
 </script>
 
-<!-- <script type="text/javascript"
-	src="../js/"></script> -->
-
+<link rel="stylesheet" type="text/css" href="../js/jquery.jqplot.css" />
 </head>
 <body>
 	<!-- title -->
@@ -192,6 +230,7 @@ var data='[{"id": "1", "name" : "CUT 1", "failures": "1","errors":"1","total":"2
 	<!-- start run -->
 		<!--  close run -->
 	</div>
+	<div id="chart1" style="height:50%;width:100%; "></div>
 	<!--  close testContainer -->
 </body>
 </html>
