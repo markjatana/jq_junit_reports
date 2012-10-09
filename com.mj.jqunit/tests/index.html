@@ -34,7 +34,7 @@ var data='[{"id": "1", "name" : "CUT 1", "failures": "1","errors":"1","total":"2
 		for(var i=0; i < run.length ; i++){
 			generateMarkUp(run[i]);	
 			for(var x =0; x < run[i].testSuites.length ; x++){
-				var testSuite = run[i].testSuites;
+				var testSuite = run[i].testSuites[x];
 				hide("suiteContainer_"+testSuite.id);
 			}
 		}
@@ -137,7 +137,7 @@ var data='[{"id": "1", "name" : "CUT 1", "failures": "1","errors":"1","total":"2
 		$(document.getElementById('testContainer')).prepend('<div id="run_'+ run.id +'" class="runContainer group">'
 				+'<div class="runHeader group">'
 					+'<div id="runMargin_'+ run.id +'" class="runMargin rounded margin group">'
-						+'<div id="runTwistie_'+ run.id +'" class="runTwistie">-</div>'
+						+'<div id="runTwistie_'+ run.id +'" class="runTwistie">+</div>'
 					+'</div>'
 					+'<div class="summary rounded">'
 						+'<ol class="details group">'
