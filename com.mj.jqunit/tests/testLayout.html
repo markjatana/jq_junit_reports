@@ -1,183 +1,26 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<!-- Copyright 2012 Mark Jatana  -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>JJunit Report Demo</title>
-<meta content="text/html; charset=iso-8859-1" http-equiv="content-type">
-<meta content="en" name="language">
-<meta content="main" name="layout">
-<style>
-/*Copyright 2012 Mark Jatana */
-/* Undo some of the default styling */
-.group:after {
-content: ".";
-display: block;
-height: 0;
-clear: both;
-visibility: hidden;
-}
-ol,ul {
-list-style: none outside none;
-}
-:link,:visited {
-text-decoration: none;
-}
-ul,ol {
-list-style: none;
-}
-h1,h2,h3,h4,h5,h6,th,caption {
-font-size: 1em;
-margin: 0px;
-padding: 0px;
-}
-button,ul,ol,li,h1,h2,h3,h4,h5,h6,body,html,p,blockquote,div,table,tr,td,form
-{
-margin: 0px;
-padding: 0px;
-font-family: Tahoma, Geneva, sans-serif;
-font-weight: normal;
-border-collapse: collapse;
-}
-a img,:link img,:visited img,img {
-border: none;
-margin: 0px;
-padding: 0px;
-}
-body {
-font-family: sans-serif;
-margin: 5em;
-}
-div.testContainer{
-width: 100%;
-}
-div.runMargin {
-float: left;
-width: 5%;
-padding: 16px;
-border: solid 2px #4BE010;
-margin: 0.25%;
-margin-right: 1%;
-box-shadow: 3px 3px 7px #777;
-text-align: center;
-}
-.fail {
-border: solid 2px #E60026;
-}
-div.runContainer{
-width:100%;
-}
-div.runTwistie {
-margin: auto;
-font-size: 2em;
-}
-div.summary {
-float:left;
-width: 90%;
-box-shadow: 3px 3px 7px #777;
-}
-.datTitle {
-font-size: 2em;
-font-weight: bold;
-}
-ol.details li {
-float: left;
-font-size: 1.1em;
-margin: 1.5%;
-}
-.progressBar {
-background: #4BE010;
-width: 100%;
-margin-left: 0.1%;
-margin-bottom: 0.05%;
-height: 2em;
--moz-border-radius: 10px;
-border-radius: 10px;
-}
-.rounded {
-border: solid 2px #d0d0d0;
--moz-border-radius: 10px;
-border-radius: 10px;
-}
-div.suiteContainer {
-width: 90%;
-margin-top: 0.25em;
-margin-left: 10%;
-}
-div.suiteHeader { /* width:100%; */
-}
-div.suiteTwistie {
-margin: auto;
-font-size: 2em;
-}
-div.suiteMargin {
-float: left;
-width: 5%;
-padding: 1%;
-border: solid 2px #4BE010;
-margin: 0.25%;
-text-align:center;
-}
-div.suiteMargin:nth-child(odd) {
-background: #F2F2F2;
-}
-div.suiteDetails {
-float: left;
-padding: 2%;
-font-size: 1.1em;
-width: 75%;
-margin: 0.25%;
-}
-div.suiteDetails:nth-child(even) {
-background: #F2F2F2;
-}
-div.caseContainer {
-width: 100%;
-margin-top: 0.1em;
-padding-left: 9%;
-}
-div.caseMargin {
-border: 2px solid #4BE010;
-float: left;
-margin: 0.25%;
-margin-right: 0.5%;
-padding: 1%;
-width: 3%;
-background: #F2F2F2;
-text-align:center;
-}
-div.odd {
-background: #FFFFFF;
-}
-div.caseTwistie {
-float: left;
-margin: auto;
-font-size: 1.5em;
-}
-.caseDetails {
-float: left;
-padding-top: 1.6%;
-margin: 0.25%;
-padding-bottom: 1.5%;
-padding-left: 1%;
-width: 60%;
-background: #F2F2F2;
-}
-</link>
-<script src="http://code.jquery.com/jquery-latest.js"></script>
-<script src="../js/dashOld.js"></script>
-<script>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+<meta name="language" content="en" />
+<meta name="layout" content="main"></meta>
+<link rel="stylesheet" href="../css/dashboard.css" />
 </head>
 <body>
-	<div id="datTitle" class="datTitle">DAT : 1234567</div>
-	<div id="testContainer" class="testContainer">
+	<div id="size">Size is 1345.3666</div>
+	<div id="testContainer" class="testContainer"
+		style="font-size: 125.15%;">
 		<div id="run_2" class="runContainer group">
 			<div class="runHeader group">
 				<div id="runMargin_2" class="runMargin rounded margin group"
 					style="border: 2px solid green;">
-					<div id="runTwistie_2" class="runTwistie">+</div>
+					<div id="runTwistie_2" class=" twistie runTwistie">-</div>
 				</div>
 				<div class="summary rounded">
 					<ol class="details group">
-						<li>CUT 2: 1/2</li>
+						<li>Test Run 2: 1/2</li>
 						<li>Errors: 0</li>
 						<li>Failures: 0</li>
 					</ol>
@@ -185,41 +28,109 @@ background: #F2F2F2;
 						style="width: 50%; background: none repeat scroll 0% 0% green;"></div>
 				</div>
 			</div>
-			<div id="suiteContainer_21" class="suiteContainer group"
-				style="display: block;">
+			<div id="suiteContainer_21" class="suiteContainer group">
 				<div class="suiteHeader group">
-					<div id="caseContainer_21" class="caseContainer group"
-						style="display: none;">
-						<div id="caseContainer_22" class="caseContainer group"
-							style="display: none;"></div>
+					<div id="suiteMargin_21"
+						class="suiteMargin group rounded margin pass">
+						<div id="suiteTwistie_21" class=" twistie">-</div>
 					</div>
-					<div id="run_1" class="runContainer group">
-						<div class="runHeader group">
-							<div id="suiteContainer_1" class="suiteContainer group"
-								style="display: block;">
-								<div class="suiteHeader group">
-									<div id="caseContainer_1" class="caseContainer group"
-										style="display: block;">
-										<div id="caseHeader" class="caseHeader group">
-											<div id="caseMargin_1"
-												class="margin caseMargin rounded group odd pass">
-												<div id="caseTwistie_1" class="caseTwistie">+</div>
-											</div>
-											<div id="case_1" class="caseDetails rounded group odd">vso_ban</div>
-										</div>
-									</div>
-									<div id="caseContainer_2" class="caseContainer group"
-										style="display: block;">
-										<div id="caseHeader" class="caseHeader group">
-											<div id="caseMargin_2"
-												class="margin caseMargin rounded group odd fail">
-												<div id="caseTwistie_2" class="caseTwistie">+</div>
-											</div>
-											<div id="case_2" class="caseDetails rounded group odd">vse_ban</div>
-										</div>
-									</div>
-								</div>
-							</div>
+					<div class="suiteDetails rounded">Test Suite 2.1</div>
+				</div>
+				<div id="caseContainer_21" class="caseContainer group">
+					<div id="caseHeader" class="caseHeader group">
+						<div id="caseMargin_21"
+							class="margin caseMargin rounded group odd pass">
+							<div id="caseTwistie_21" class="twistie caseTwistie">+</div>
 						</div>
+						<div id="case_21" class="caseDetails rounded group odd">Test
+							Case A</div>
+					</div>
+				</div>
+				<div id="caseContainer_22" class="caseContainer group">
+					<div id="caseHeader" class="caseHeader group">
+						<div id="caseMargin_22"
+							class="margin caseMargin rounded group odd pass">
+							<div id="caseTwistie_22" class="twistie caseTwistie">+</div>
+						</div>
+						<div id="case_22" class="caseDetails rounded group odd">Test
+							Case B</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="run_1" class="runContainer group">
+			<div class="runHeader group">
+				<div id="runMargin_1" class="runMargin rounded margin group"
+					style="border: 2px solid red;">
+					<div id="runTwistie_1" class=" twistie runTwistie">-</div>
+				</div>
+				<div class="summary rounded">
+					<ol class="details group">
+						<li>Test Run 1: 2/2</li>
+						<li>Errors: 1</li>
+						<li>Failures: 1</li>
+					</ol>
+					<div id="progressBar_1" class="progressBar"
+						style="width: 100%; background: none repeat scroll 0% 0% red;"></div>
+				</div>
+			</div>
+			<div id="suiteContainer_1" class="suiteContainer group">
+				<div class="suiteHeader group">
+					<div id="suiteMargin_1"
+						class="suiteMargin group rounded margin fail">
+						<div id="suiteTwistie_1" class=" twistie">-</div>
+					</div>
+					<div class="suiteDetails rounded">TestSuite 1</div>
+				</div>
+				<div id="caseContainer_1" class="caseContainer group">
+					<div id="caseHeader" class="caseHeader group">
+						<div id="caseMargin_1"
+							class="margin caseMargin rounded group odd pass">
+							<div id="caseTwistie_1" class="twistie caseTwistie">+</div>
+						</div>
+						<div id="case_1" class="caseDetails rounded group odd">Test
+							Case 1</div>
+					</div>
+					<div class="caseOutput rounded group">
+						<div class="caseOutputTitle">Exception:</div>
+						<div class="caseOutputText">Lorem ipsum dolor sit amet,
+							consectetur adipiscing elit. Aenean semper tellus vitae arcu
+							varius vel suscipit dui rutrum. Sed turpis diam, dignissim eu
+							gravida ut, vehicula quis velit. Curabitur ultrices gravida
+							adipiscing. Donec eleifend, ligula vitae vehicula aliquam, augue
+							felis gravida nunc, sed euismod nisl odio at enim. Nullam vitae
+							enim eget leo tincidunt elementum ac et arcu. Nam laoreet
+							facilisis sollicitudin. Lorem ipsum dolor sit amet, consectetur
+							adipiscing elit. Aliquam ante magna, consequat id feugiat id,
+							viverra non felis. Integer congue, lacus nec facilisis bibendum,
+							enim leo interdum orci, at feugiat nisi felis id nisl. Sed
+							blandit magna et tellus sagittis ultrices. Nunc ornare ipsum et
+							mi faucibus bibendum. Fusce et nulla ut dolor dictum adipiscing
+							vitae ac turpis. Suspendisse faucibus massa non eros blandit vel
+							volutpat orci porta. Pellentesque feugiat congue nulla at
+							ullamcorper. Etiam commodo, velit sed tincidunt suscipit, lectus
+							odio porttitor massa, interdum rutrum lacus leo non diam. Duis
+							tincidunt risus ac diam sodales at placerat dolor semper.
+							Suspendisse quis gravida enim. Quisque blandit consequat tortor,
+							non molestie neque mollis sed. Nulla facilisi.</div>
+					</div>
+					<div class="caseOutput  rounded group">
+						<div class="caseOutputTitle">Output:</div>
+						<div class="caseOutputText">
+							Lorem ipsum dolor sit amet,consectetur
+							Lorem ipsum dolor sit amet,consectetur
+							Lorem ipsum dolor sit amet,consectetur
+							Lorem ipsum dolor sit amet,consectetur
+							Lorem ipsum dolor sit amet,consectetur
+							
+							</div>
+					</div>
+
+				</div>
+				<div id="caseContainer_2" class="caseContainer group">
+					<div id="caseHeader" class="caseHeader group"></div>
+				</div>
+			</div>
+		</div>
 </body>
 </html>

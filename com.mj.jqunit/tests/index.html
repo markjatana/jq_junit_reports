@@ -12,7 +12,7 @@
 
 <script>
 
-var data='[{"id": "1", "name":"Test Run 1", "failures": "1","errors":"1","total":"2","completed":"2","testSuites":[{"id": "1","name":"TestSuite 1","testCases":[{"id":"1", "name":"Test Case 1","time":"3hrs","state":"passed"},{"id":"2", "name":"Test Case 2","time":"2hrs","state":"failed"}]}]},{"id": "2", "name":"Test Run 2", "failures": "0","errors":"0","total":"2","completed":"1","testSuites":[{"id": "21","name":"Test Suite 2.1","testCases":[{"id":"21", "name":"Test Case A","time":"3hrs","state":"passed"},{"id":"22", "name":"Test Case B","time":"2hrs","state":"passed"}]}]}]';
+var data='[{"id": "1", "name":"Test Run 1", "failures": "1","errors":"1","total":"2","completed":"2","testSuites":[{"id": "1","name":"TestSuite 1","testCases":[{"id":"1", "name":"Test Case 1","time":"3hrs","state":"passed"},{"id":"2", "name":"Test Case 2","time":"2hrs","state":"failed"}]}]},{"id": "2", "name":"Test Run 2", "failures": "0","errors":"0","total":"2","completed":"1","testSuites":[{"id": "21","name":"Test Suite 2.1","testCases":[{"id":"21", "name":"Test Case A","time":"3hrs","state":"passed", "exception":"This is an exception message", "output: "there is test output"},{"id":"22", "name":"Test Case B","time":"2hrs","state":"passed"}]}]}]';
 
 	$(document).ready(function() {
 		var run = JSON.parse(data)
