@@ -19,6 +19,8 @@ function generateMarkUp(run){
 		addListeners(run);
 		addPassFailIndicators(run);
 		setFontSize();
+		
+		document.getElementById('suiteMargin_2').addEventListener("click", createHideListener(['caseException_21'], 'caseTwistie_21'), false);
 	}
 	
 	function addPassFailIndicators(run){
@@ -64,7 +66,24 @@ function generateMarkUp(run){
 			
 			var caseContainerIds = [];
 			for(var x=0; x < testSuite.testCases.length; x++){
-				caseContainerIds.push( "caseContainer_"+testSuite.testCases[x].id);
+				var testCase = testSuite.testCases[x];
+				var caseContainerId = "caseContainer_"+testCase.id;
+				caseContainerIds.push(caseContainerId);
+				var caseLogIds = [];
+				if(testCase.exception){
+					caseLogIds.push("caseException_"+testCase.id)
+				}
+				if(testCase.output){
+					caseLogIds.push("caseOutput_"+testCase.id)
+				}
+				if(caseLogIds.length !=0) {
+					var caseTwistieId = 'caseTwistie_'+testCase.id;
+					console.log(caseLogIds);
+					console.log(caseTwistieId);
+					document.getElementById(caseContainerId).addEventListener("click", createHideListener(caseLogIds, caseTwistieId), false);
+					//document.getElementById(caseContainerId).addEventListener("click", function(){alert("clicked ")}, false);
+					
+				}
 			}
 			document.getElementById('suiteMargin_'+testSuite.id).addEventListener("click", createHideListener(caseContainerIds, 'suiteTwistie_'+testSuite.id), false);
 		}
@@ -148,13 +167,31 @@ function generateMarkUp(run){
 					'<div id="caseContainer_'+ testCase.id +'" class="caseContainer group">'
 			
 					+	'<div id="caseHeader" class="caseHeader group">'
-					+	'	<div id="caseMargin_'+ testCase.id +'" class="margin caseMargin rounded group odd">'	
-					+			'<div id="caseTwistie_'+ testCase.id +'" class="twistie caseTwistie">+</div>'
-					+	'	</div>'
-					+		'<div id="case_'+ testCase.id +'" class="caseDetails rounded group odd">' + testCase.name +'</div>'
+					+		'<div id="caseMargin_'+ testCase.id +'" class="margin caseMargin rounded group odd">'	
+					+			'<div id="caseTwistie_'+ testCase.id +'" class="twistie caseTwistie">-</div>'
 					+		'</div>'
-			
-					+'</div>');
+					+		'<div id="case_'+ testCase.id +'" class="caseDetails rounded group odd">' + testCase.name +'</div>'
+						+'</div>'
+					+'</div');
+		}
+		for(var i = 0; i < testSuite.testCases.length; i++){
+			var testCase = testSuite.testCases[i];
+			var testCaseContainerElement = document.getElementById('caseContainer_'+testCase.id);
+			if(testCase.exception){
+				$(testCaseContainerElement).append(
+					'<div id="caseException_' +testCase.id + ' "class="caseOutput rounded group">'
+						+  '<div class="caseOutputTitle">Exception:</div>'
+						+  '<div class="caseOutputText">'+ testCase.exception + '</div>'
+					+ '</div');
+				
+			}
+			if(testCase.output){
+				$(testCaseContainerElement).append(
+					'<div id="caseOutput_' +testCase.id + ' "class="caseOutput rounded group">'
+						+  '<div class="caseOutputTitle">Output:</div>'
+						+  '<div class="caseOutputText">'+ testCase.output + '</div>'
+					+ '</div');
+			}
 		}
 	}
 	
@@ -171,7 +208,8 @@ function generateMarkUp(run){
 	}
 
 	function hide(id){
-		$('#'+id).slideToggle('slow');
+		var result = $('#'+id).slideToggle('slow');
+		console.log("Trying to toggle "+id);
 	}
 	
 	function switchTwistie(id){
