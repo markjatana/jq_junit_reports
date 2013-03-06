@@ -7,11 +7,20 @@
 <meta name="language" content="en" />
 <meta name="layout" content="main"></meta>
 <link rel="stylesheet" href="../css/dashboard.css" />
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script>
+
+$(document).ready(function() {
+	$('#caseTwistie_1').on("click", function(event){
+		$('#output_1').slideToggle('slow');
+		$('#output_2').slideToggle('slow');
+	});
+});
+</script>
 </head>
 <body>
 	<div id="size">Size is 1345.3666</div>
-	<div id="testContainer" class="testContainer"
-		style="font-size: 125.15%;">
+	<div id="testContainer" class="testContainer" style="font-size: 125.15%;">
 		<div id="run_2" class="runContainer group">
 			<div class="runHeader group">
 				<div id="runMargin_2" class="runMargin rounded margin group"
@@ -91,7 +100,7 @@
 						<div id="case_1" class="caseDetails rounded group odd">Test
 							Case 1</div>
 					</div>
-					<div class="caseOutput rounded group">
+					<div id="output_1" class="caseOutput rounded group">
 						<div class="caseOutputTitle">Exception:</div>
 						<div class="caseOutputText">Lorem ipsum dolor sit amet,
 							consectetur adipiscing elit. Aenean semper tellus vitae arcu
@@ -114,7 +123,7 @@
 							Suspendisse quis gravida enim. Quisque blandit consequat tortor,
 							non molestie neque mollis sed. Nulla facilisi.</div>
 					</div>
-					<div class="caseOutput  rounded group">
+					<div id="output_2" class="caseOutput  rounded group">
 						<div class="caseOutputTitle">Output:</div>
 						<div class="caseOutputText">
 							Lorem ipsum dolor sit amet,consectetur
@@ -131,6 +140,7 @@
 					<div id="caseHeader" class="caseHeader group"></div>
 				</div>
 			</div>
+		</div>
 		</div>
 </body>
 </html>

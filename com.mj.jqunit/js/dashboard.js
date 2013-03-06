@@ -1,14 +1,14 @@
-	// test case json state pass value
-	var PASS_KEY = 'passed';
+// test case json state pass value
+var PASS_KEY = 'passed';
 	
-	// test case json state fail value
-	var FAIL_KEY = 'failed';
+// test case json state fail value
+var FAIL_KEY = 'failed';
 	
-	// style class for passed elements
-	var PASS_CLASS = 'pass';
+// style class for passed elements
+var PASS_CLASS = 'pass';
 	
-	// style class for fail elements
-	var FAIL_CLASS = 'fail';
+// style class for fail elements
+var FAIL_CLASS = 'fail';
 
 function generateMarkUp(run){
 		generateRunContainers(run);
@@ -19,11 +19,57 @@ function generateMarkUp(run){
 		addListeners(run);
 		addPassFailIndicators(run);
 		setFontSize();
-		
-		document.getElementById('suiteMargin_2').addEventListener("click", createHideListener(['caseException_21'], 'caseTwistie_21'), false);
+		closeAll(run);
 	}
+
+/**
+ * Close all child run elements
+ * @param run the Run object to traverse
+ */
+function closeAll(run){
+	for(var i = 0; i < run.testSuites.length; i++){
+		var testSuite = run.testSuites[i];
+		closeSuite(testSuite)
+		hide("suiteContainer_"+testSuite.id);
+	}
+	switchTwistie("runTwistie_"+run.id);
 	
-	function addPassFailIndicators(run){
+}
+
+/**
+ * Close a suite - hides all the child testCases()
+ * @param testSuite - the testSuite to close
+ */
+function closeSuite(testSuite){
+	for(var j = 0; j < testSuite.testCases.length ; j++){
+		var testCase = testSuite.testCases[j];
+		closeCaseChildren(testCase);
+		hide("caseContainer_"+testCase.id);
+	}
+	switchTwistie("suiteTwistie_"+testSuite.id);
+}
+
+/**
+ * Closes all elements associated with a 'testcase'
+ * @param testCase - the test case to close
+ * 
+ */
+function closeCaseChildren(testCase){
+	var testCaseId = testCase.id;
+	if(testCase.exception || testCase.output){
+		if(testCase.exception){
+			hide("caseException_"+testCaseId);
+		}
+		if(testCase.output){
+			hide("caseOutput_"+testCaseId);
+		}
+		switchTwistie("caseTwistie_"+testCaseId);
+	}
+}
+
+
+	
+function addPassFailIndicators(run){
 
 		var progBar = document.getElementById('progressBar_'+run.id);
 		$(progBar).width((run.completed/run.total)*100+'%');
@@ -81,7 +127,6 @@ function generateMarkUp(run){
 					console.log(caseLogIds);
 					console.log(caseTwistieId);
 					document.getElementById(caseContainerId).addEventListener("click", createHideListener(caseLogIds, caseTwistieId), false);
-					//document.getElementById(caseContainerId).addEventListener("click", function(){alert("clicked ")}, false);
 					
 				}
 			}
@@ -163,12 +208,16 @@ function generateMarkUp(run){
 		var suiteContainerElement = document.getElementById('suiteContainer_'+testSuite.id);
 		for(var i = 0; i < testSuite.testCases.length; i++){
 			var testCase = testSuite.testCases[i];
+			var twistieIcon  = "&nbsp;";
+			if(testCase.exception || testCase.output){
+				twistieIcon = "-";
+			}
 			$(suiteContainerElement).append(
 					'<div id="caseContainer_'+ testCase.id +'" class="caseContainer group">'
 			
 					+	'<div id="caseHeader" class="caseHeader group">'
 					+		'<div id="caseMargin_'+ testCase.id +'" class="margin caseMargin rounded group odd">'	
-					+			'<div id="caseTwistie_'+ testCase.id +'" class="twistie caseTwistie">-</div>'
+					+			'<div id="caseTwistie_'+ testCase.id +'" class="twistie caseTwistie">'+twistieIcon+'</div>'
 					+		'</div>'
 					+		'<div id="case_'+ testCase.id +'" class="caseDetails rounded group odd">' + testCase.name +'</div>'
 						+'</div>'
@@ -179,7 +228,7 @@ function generateMarkUp(run){
 			var testCaseContainerElement = document.getElementById('caseContainer_'+testCase.id);
 			if(testCase.exception){
 				$(testCaseContainerElement).append(
-					'<div id="caseException_' +testCase.id + ' "class="caseOutput rounded group">'
+					'<div id="caseException_' +testCase.id + '" class="caseOutput rounded group">'
 						+  '<div class="caseOutputTitle">Exception:</div>'
 						+  '<div class="caseOutputText">'+ testCase.exception + '</div>'
 					+ '</div');
@@ -187,7 +236,7 @@ function generateMarkUp(run){
 			}
 			if(testCase.output){
 				$(testCaseContainerElement).append(
-					'<div id="caseOutput_' +testCase.id + ' "class="caseOutput rounded group">'
+					'<div id="caseOutput_' +testCase.id + '" class="caseOutput rounded group">'
 						+  '<div class="caseOutputTitle">Output:</div>'
 						+  '<div class="caseOutputText">'+ testCase.output + '</div>'
 					+ '</div');
@@ -196,19 +245,26 @@ function generateMarkUp(run){
 	}
 	
 	
-
+/**
+ * Creates a function that will close an element and an associated twisitie if provided
+ * @param ids ids of the elements to be toggled
+ * @param twistieId (optionaL)
+ * @returns {Function}
+ */
 	function createHideListener(ids, twistieId){
 		var hideElements = function(){
 			for(var i=0;i < ids.length;i++){
 				hide(ids[i]);
 			}
-			switchTwistie(twistieId);
+			if(twistieId) {
+				switchTwistie(twistieId);
+			}
 		}
 		return hideElements;
 	}
 
 	function hide(id){
-		var result = $('#'+id).slideToggle('slow');
+		$('#'+id).slideToggle('slow');
 		console.log("Trying to toggle "+id);
 	}
 	
